@@ -7,9 +7,8 @@ srcs = [
 ]
 
 env_gdleapmotionV2 = env_modules.Clone()
-
 env_gdleapmotionV2.Append(CPPPATH=['LeapSDK/include/'])
-env_gdleapmotionV2.Append(LIBPATH=['LeapSDK/lib/x64/'])
-env_gdleapmotionV2.Append(LIBS=['libLeap.so'])
-env_gdleapmotionV2.Append(CXXFLAGS=['-Imodules/gdleapmotionV2/'])
 env_gdleapmotionV2.add_source_files(env.modules_sources, srcs)
+
+env.Append(LIBS=['Leap'])
+env.Append(LIBPATH=['#modules/gdleapmotionV2/LeapSDK/lib/x64/'])
