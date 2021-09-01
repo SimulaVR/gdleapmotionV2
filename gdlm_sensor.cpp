@@ -1,51 +1,72 @@
 #include "gdlm_sensor.h"
 #include <iostream>
+#include <thread>
+
+#include "core/object.h"
+#include "scene/main/node.h"
+
+#include "core/array.h"
+#include "servers/arvr_server.h"
+#include "servers/arvr/arvr_positional_tracker.h"
+#include "servers/arvr/arvr_interface.h"
+#include "scene/3d/arvr_nodes.h"
+
+#include "core/dictionary.h"
+#include "core/global_constants.h"
+#include "core/os/os.h"
+#include "scene/resources/packed_scene.h"
+#include "core/resource.h"
+#include "core/io/resource_loader.h"
+#include "scene/3d/skeleton.h"
+#include "scene/3d/spatial.h"
+#include "core/math/transform.h"
+
+//#include <LeapC.h>
+#include <Leap.h>
 
 #define PI 3.14159265359f
 
-using namespace godot;
+// void GDLMSensor::_register_methods() {
+// 	Dictionary args;
 
-void GDLMSensor::_register_methods() {
-	Dictionary args;
+// 	args[Variant("hand")] = Variant(Variant::OBJECT);
+// 	register_signal<GDLMSensor>("new_hand", args);
+// 	register_signal<GDLMSensor>("about_to_remove_hand", args);
 
-	args[Variant("hand")] = Variant(Variant::OBJECT);
-	register_signal<GDLMSensor>("new_hand", args);
-	register_signal<GDLMSensor>("about_to_remove_hand", args);
+// 	register_method("get_is_running", &GDLMSensor::get_is_running);
+// 	register_method("get_is_connected", &GDLMSensor::get_is_connected);
+// 	register_method("get_left_hand_scene", &GDLMSensor::get_left_hand_scene);
+// 	register_method("set_left_hand_scene", &GDLMSensor::set_left_hand_scene);
+// 	register_method("get_right_hand_scene", &GDLMSensor::get_right_hand_scene);
+// 	register_method("set_right_hand_scene", &GDLMSensor::set_right_hand_scene);
+// 	register_method("get_arvr", &GDLMSensor::get_arvr);
+// 	register_method("set_arvr", &GDLMSensor::set_arvr);
+// 	register_method("get_smooth_factor", &GDLMSensor::get_smooth_factor);
+// 	register_method("set_smooth_factor", &GDLMSensor::set_smooth_factor);
+// 	register_method("get_keep_frames", &GDLMSensor::get_keep_frames);
+// 	register_method("set_keep_frames", &GDLMSensor::set_keep_frames);
+// 	register_method("get_keep_last_hand", &GDLMSensor::get_keep_last_hand);
+// 	register_method("set_keep_last_hand", &GDLMSensor::set_keep_last_hand);
+// 	register_method("get_hmd_to_leap_motion", &GDLMSensor::get_hmd_to_leap_motion);
+// 	register_method("set_hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion);
+// 	register_method("_physics_process", &GDLMSensor::_physics_process);
+// 	register_method("get_finger_name", &GDLMSensor::get_finger_name);
+// 	register_method("get_finger_bone_name", &GDLMSensor::get_finger_bone_name);
 
-	register_method("get_is_running", &GDLMSensor::get_is_running);
-	register_method("get_is_connected", &GDLMSensor::get_is_connected);
-	register_method("get_left_hand_scene", &GDLMSensor::get_left_hand_scene);
-	register_method("set_left_hand_scene", &GDLMSensor::set_left_hand_scene);
-	register_method("get_right_hand_scene", &GDLMSensor::get_right_hand_scene);
-	register_method("set_right_hand_scene", &GDLMSensor::set_right_hand_scene);
-	register_method("get_arvr", &GDLMSensor::get_arvr);
-	register_method("set_arvr", &GDLMSensor::set_arvr);
-	register_method("get_smooth_factor", &GDLMSensor::get_smooth_factor);
-	register_method("set_smooth_factor", &GDLMSensor::set_smooth_factor);
-	register_method("get_keep_frames", &GDLMSensor::get_keep_frames);
-	register_method("set_keep_frames", &GDLMSensor::set_keep_frames);
-	register_method("get_keep_last_hand", &GDLMSensor::get_keep_last_hand);
-	register_method("set_keep_last_hand", &GDLMSensor::set_keep_last_hand);
-	register_method("get_hmd_to_leap_motion", &GDLMSensor::get_hmd_to_leap_motion);
-	register_method("set_hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion);
-	register_method("_physics_process", &GDLMSensor::_physics_process);
-	register_method("get_finger_name", &GDLMSensor::get_finger_name);
-	register_method("get_finger_bone_name", &GDLMSensor::get_finger_bone_name);
+// 	register_property<GDLMSensor, bool>("arvr", &GDLMSensor::set_arvr, &GDLMSensor::get_arvr, false);
+// 	register_property<GDLMSensor, float>("smooth_factor", &GDLMSensor::set_smooth_factor, &GDLMSensor::get_smooth_factor, 0.5);
+// 	register_property<GDLMSensor, int>("keep_hands_for_frames", &GDLMSensor::set_keep_frames, &GDLMSensor::get_keep_frames, 60);
+// 	register_property<GDLMSensor, bool>("keep_last_hand", &GDLMSensor::set_keep_last_hand, &GDLMSensor::get_keep_last_hand, true);
 
-	register_property<GDLMSensor, bool>("arvr", &GDLMSensor::set_arvr, &GDLMSensor::get_arvr, false);
-	register_property<GDLMSensor, float>("smooth_factor", &GDLMSensor::set_smooth_factor, &GDLMSensor::get_smooth_factor, 0.5);
-	register_property<GDLMSensor, int>("keep_hands_for_frames", &GDLMSensor::set_keep_frames, &GDLMSensor::get_keep_frames, 60);
-	register_property<GDLMSensor, bool>("keep_last_hand", &GDLMSensor::set_keep_last_hand, &GDLMSensor::get_keep_last_hand, true);
+// 	register_property<GDLMSensor, String>("left_hand_scene", &GDLMSensor::set_left_hand_scene, &GDLMSensor::get_left_hand_scene, String());
+// 	register_property<GDLMSensor, String>("right_hand_scene", &GDLMSensor::set_right_hand_scene, &GDLMSensor::get_right_hand_scene, String());
 
-	register_property<GDLMSensor, String>("left_hand_scene", &GDLMSensor::set_left_hand_scene, &GDLMSensor::get_left_hand_scene, String());
-	register_property<GDLMSensor, String>("right_hand_scene", &GDLMSensor::set_right_hand_scene, &GDLMSensor::get_right_hand_scene, String());
-
-	// assume rotated by 90 degrees on x axis and -180 on Y and 8cm from center
-	Transform htlp;
-	htlp.basis = Basis(Vector3(90.0f * PI / 180.0f, -180.0f * PI / 180.0f, 0.0f));
-	htlp.origin = Vector3(0.0f, 0.0f, -0.08f);
-	register_property<GDLMSensor, Transform>("hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion, &GDLMSensor::get_hmd_to_leap_motion, htlp);
-}
+// 	// assume rotated by 90 degrees on x axis and -180 on Y and 8cm from center
+// 	Transform htlp;
+// 	htlp.basis = Basis(Vector3(90.0f * PI / 180.0f, -180.0f * PI / 180.0f, 0.0f));
+// 	htlp.origin = Vector3(0.0f, 0.0f, -0.08f);
+// 	register_property<GDLMSensor, Transform>("hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion, &GDLMSensor::get_hmd_to_leap_motion, htlp);
+// }
 
 void GDLMSensor::_init() {
 
@@ -231,7 +252,7 @@ void GDLMSensor::set_left_hand_scene(String p_resource) {
 		hand_scene_names[0] = p_resource;
 
 		// maybe delay loading until we need it?
-		hand_scenes[0] = ResourceLoader::get_singleton()->load(p_resource);
+		hand_scenes[0] = ResourceLoader::load(p_resource);
 	}
 }
 
@@ -244,7 +265,7 @@ void GDLMSensor::set_right_hand_scene(String p_resource) {
 		hand_scene_names[1] = p_resource;
 
 		// maybe delay loading until we need it?
-		hand_scenes[1] = ResourceLoader::get_singleton()->load(p_resource);
+		hand_scenes[1] = ResourceLoader::load(p_resource);
 	}
 }
 
@@ -465,7 +486,7 @@ GDLMSensor::hand_data *GDLMSensor::new_hand(int p_type, uint32_t p_leap_id) {
 	new_hand_data->unused_frames = 0;
 
 	new_hand_data->scene = (Spatial *)hand_scenes[p_type]->instance(); // is it safe to cast like this?
-	new_hand_data->scene->set_name(String("Hand ") + String(p_type) + String(" ") + String(p_leap_id));
+	new_hand_data->scene->set_name(String("Hand ") + String(std::to_string(p_type).c_str()) + String(" ") + String(std::to_string(p_leap_id).c_str()));
 	add_child(new_hand_data->scene, false);
 
 	for (int d = 0; d < 5; d++) {
@@ -520,7 +541,7 @@ void GDLMSensor::delete_hand(GDLMSensor::hand_data *p_hand_data) {
 
 		// hide and then queue free, this will properly destruct our scene and remove it from our tree
 		p_hand_data->scene->hide();
-		p_hand_data->scene->queue_free();
+		p_hand_data->scene->queue_delete(); // since `ClassDB::bind_method(D_METHOD("queue_free"), &Node::queue_delete);`
 	}
 
 	::free(p_hand_data);
@@ -636,6 +657,60 @@ void GDLMSensor::_physics_process(float delta) {
 		}
 	}
 }
+
+void GDLMSensor::_bind_methods() {
+  ClassDB::bind_method(D_METHOD("get_is_running"), &GDLMSensor::get_is_running);
+  ClassDB::bind_method(D_METHOD("get_is_connected"), &GDLMSensor::get_is_connected);
+  ClassDB::bind_method(D_METHOD("get_left_hand_scene"), &GDLMSensor::get_left_hand_scene);
+  ClassDB::bind_method(D_METHOD("set_left_hand_scene", "left_hand_scene"), &GDLMSensor::set_left_hand_scene);
+  ClassDB::bind_method(D_METHOD("get_right_hand_scene"), &GDLMSensor::get_right_hand_scene);
+  ClassDB::bind_method(D_METHOD("set_right_hand_scene", "right_hand_scene"), &GDLMSensor::set_right_hand_scene);
+  ClassDB::bind_method(D_METHOD("get_arvr"), &GDLMSensor::get_arvr);
+  ClassDB::bind_method(D_METHOD("set_arvr", "arvr"), &GDLMSensor::set_arvr);
+  ClassDB::bind_method(D_METHOD("get_smooth_factor"), &GDLMSensor::get_smooth_factor);
+  ClassDB::bind_method(D_METHOD("set_smooth_factor", "smooth_factor"), &GDLMSensor::set_smooth_factor);
+  ClassDB::bind_method(D_METHOD("get_keep_frames"), &GDLMSensor::get_keep_frames);
+  ClassDB::bind_method(D_METHOD("set_keep_frames", "keep_frames"), &GDLMSensor::set_keep_frames);
+  ClassDB::bind_method(D_METHOD("get_keep_last_hand"), &GDLMSensor::get_keep_last_hand);
+  ClassDB::bind_method(D_METHOD("set_keep_last_hand", "keep_last_hand"), &GDLMSensor::set_keep_last_hand);
+  ClassDB::bind_method(D_METHOD("get_hmd_to_leap_motion"), &GDLMSensor::get_hmd_to_leap_motion);
+  ClassDB::bind_method(D_METHOD("set_hmd_to_leap_motion", "hmd_to_leap_motion"), &GDLMSensor::set_hmd_to_leap_motion);
+  //ClassDB::bind_method(D_METHOD("_physics_process"), &GDLMSensor::_physics_process);
+  ClassDB::bind_method(D_METHOD("get_finger_name"), &GDLMSensor::get_finger_name);
+  ClassDB::bind_method(D_METHOD("get_finger_bone_name"), &GDLMSensor::get_finger_bone_name);
+
+
+	ADD_SIGNAL(MethodInfo("new_hand", PropertyInfo(Variant::OBJECT, "hand", PROPERTY_HINT_RESOURCE_TYPE, "SceneTree")));
+	ADD_SIGNAL(MethodInfo("about_to_remove_hand", PropertyInfo(Variant::OBJECT, "hand", PROPERTY_HINT_RESOURCE_TYPE, "SceneTree")));
+
+
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "arvr",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "arvr",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_arvr", "get_arvr");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "smooth_factor",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "smooth_factor",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_smooth_factor", "get_smooth_factor");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "keep_hands_for_frames",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "keep_hands_for_frames",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_keep_frames", "get_keep_frames");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "keep_last_hand",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "keep_last_hand",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_keep_last_hand", "get_keep_last_hand");
+
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "left_hand_scene",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "left_hand_scene",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_left_hand_scene", "get_left_hand_scene");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "right_hand_scene",
+				PROPERTY_HINT_PLACEHOLDER_TEXT, "right_hand_scene",
+				PROPERTY_USAGE_DEFAULT_INTL),
+			"set_right_hand_scene", "get_right_hand_scene");
+}
+
 
 void GDLMListener::onConnect(const Leap::Controller &controller) {
   	printf("LeapMotion - connected to leap motion\n");

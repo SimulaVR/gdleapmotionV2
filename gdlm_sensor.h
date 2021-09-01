@@ -117,6 +117,7 @@ private:
 	// void handleHeadPoseEvent(const LEAP_HEAD_POSE_EVENT *head_pose_event);
 
 protected:
+	static void _bind_methods();
 	//void lock();
 	//void unlock();
 
@@ -140,7 +141,7 @@ protected:
 	void update_hand_position(GDLMSensor::hand_data *p_hand_data, Leap::Hand *p_leap_hand);
 
 public:
-	static void _register_methods();
+	//static void _register_methods();
 	static void lm_main(GDLMSensor *p_sensor);
 
 	bool get_is_running();
