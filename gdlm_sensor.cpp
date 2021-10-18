@@ -26,47 +26,47 @@
 
 #define PI 3.14159265359f
 
-// void GDLMSensor::_register_methods() {
-// 	Dictionary args;
+// // void GDLMSensor::_register_methods() {
+// // 	Dictionary args;
 
-// 	args[Variant("hand")] = Variant(Variant::OBJECT);
-// 	register_signal<GDLMSensor>("new_hand", args);
-// 	register_signal<GDLMSensor>("about_to_remove_hand", args);
+// // 	args[Variant("hand")] = Variant(Variant::OBJECT);
+// // 	register_signal<GDLMSensor>("new_hand", args);
+// // 	register_signal<GDLMSensor>("about_to_remove_hand", args);
 
-// 	register_method("get_is_running", &GDLMSensor::get_is_running);
-// 	register_method("get_is_connected", &GDLMSensor::get_is_connected);
-// 	register_method("get_left_hand_scene", &GDLMSensor::get_left_hand_scene);
-// 	register_method("set_left_hand_scene", &GDLMSensor::set_left_hand_scene);
-// 	register_method("get_right_hand_scene", &GDLMSensor::get_right_hand_scene);
-// 	register_method("set_right_hand_scene", &GDLMSensor::set_right_hand_scene);
-// 	register_method("get_arvr", &GDLMSensor::get_arvr);
-// 	register_method("set_arvr", &GDLMSensor::set_arvr);
-// 	register_method("get_smooth_factor", &GDLMSensor::get_smooth_factor);
-// 	register_method("set_smooth_factor", &GDLMSensor::set_smooth_factor);
-// 	register_method("get_keep_frames", &GDLMSensor::get_keep_frames);
-// 	register_method("set_keep_frames", &GDLMSensor::set_keep_frames);
-// 	register_method("get_keep_last_hand", &GDLMSensor::get_keep_last_hand);
-// 	register_method("set_keep_last_hand", &GDLMSensor::set_keep_last_hand);
-// 	register_method("get_hmd_to_leap_motion", &GDLMSensor::get_hmd_to_leap_motion);
-// 	register_method("set_hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion);
-// 	register_method("_physics_process", &GDLMSensor::_physics_process);
-// 	register_method("get_finger_name", &GDLMSensor::get_finger_name);
-// 	register_method("get_finger_bone_name", &GDLMSensor::get_finger_bone_name);
+// // 	register_method("get_is_running", &GDLMSensor::get_is_running);
+// // 	register_method("get_is_connected", &GDLMSensor::get_is_connected);
+// // 	register_method("get_left_hand_scene", &GDLMSensor::get_left_hand_scene);
+// // 	register_method("set_left_hand_scene", &GDLMSensor::set_left_hand_scene);
+// // 	register_method("get_right_hand_scene", &GDLMSensor::get_right_hand_scene);
+// // 	register_method("set_right_hand_scene", &GDLMSensor::set_right_hand_scene);
+// // 	register_method("get_arvr", &GDLMSensor::get_arvr);
+// // 	register_method("set_arvr", &GDLMSensor::set_arvr);
+// // 	register_method("get_smooth_factor", &GDLMSensor::get_smooth_factor);
+// // 	register_method("set_smooth_factor", &GDLMSensor::set_smooth_factor);
+// // 	register_method("get_keep_frames", &GDLMSensor::get_keep_frames);
+// // 	register_method("set_keep_frames", &GDLMSensor::set_keep_frames);
+// // 	register_method("get_keep_last_hand", &GDLMSensor::get_keep_last_hand);
+// // 	register_method("set_keep_last_hand", &GDLMSensor::set_keep_last_hand);
+// // 	register_method("get_hmd_to_leap_motion", &GDLMSensor::get_hmd_to_leap_motion);
+// // 	register_method("set_hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion);
+// // 	register_method("_physics_process", &GDLMSensor::_physics_process);
+// // 	register_method("get_finger_name", &GDLMSensor::get_finger_name);
+// // 	register_method("get_finger_bone_name", &GDLMSensor::get_finger_bone_name);
 
-// 	register_property<GDLMSensor, bool>("arvr", &GDLMSensor::set_arvr, &GDLMSensor::get_arvr, false);
-// 	register_property<GDLMSensor, float>("smooth_factor", &GDLMSensor::set_smooth_factor, &GDLMSensor::get_smooth_factor, 0.5);
-// 	register_property<GDLMSensor, int>("keep_hands_for_frames", &GDLMSensor::set_keep_frames, &GDLMSensor::get_keep_frames, 60);
-// 	register_property<GDLMSensor, bool>("keep_last_hand", &GDLMSensor::set_keep_last_hand, &GDLMSensor::get_keep_last_hand, true);
+// // 	register_property<GDLMSensor, bool>("arvr", &GDLMSensor::set_arvr, &GDLMSensor::get_arvr, false);
+// // 	register_property<GDLMSensor, float>("smooth_factor", &GDLMSensor::set_smooth_factor, &GDLMSensor::get_smooth_factor, 0.5);
+// // 	register_property<GDLMSensor, int>("keep_hands_for_frames", &GDLMSensor::set_keep_frames, &GDLMSensor::get_keep_frames, 60);
+// // 	register_property<GDLMSensor, bool>("keep_last_hand", &GDLMSensor::set_keep_last_hand, &GDLMSensor::get_keep_last_hand, true);
 
-// 	register_property<GDLMSensor, String>("left_hand_scene", &GDLMSensor::set_left_hand_scene, &GDLMSensor::get_left_hand_scene, String());
-// 	register_property<GDLMSensor, String>("right_hand_scene", &GDLMSensor::set_right_hand_scene, &GDLMSensor::get_right_hand_scene, String());
+// // 	register_property<GDLMSensor, String>("left_hand_scene", &GDLMSensor::set_left_hand_scene, &GDLMSensor::get_left_hand_scene, String());
+// // 	register_property<GDLMSensor, String>("right_hand_scene", &GDLMSensor::set_right_hand_scene, &GDLMSensor::get_right_hand_scene, String());
 
-// 	// assume rotated by 90 degrees on x axis and -180 on Y and 8cm from center
-// 	Transform htlp;
-// 	htlp.basis = Basis(Vector3(90.0f * PI / 180.0f, -180.0f * PI / 180.0f, 0.0f));
-// 	htlp.origin = Vector3(0.0f, 0.0f, -0.08f);
-// 	register_property<GDLMSensor, Transform>("hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion, &GDLMSensor::get_hmd_to_leap_motion, htlp);
-// }
+// // 	// assume rotated by 90 degrees on x axis and -180 on Y and 8cm from center
+// // 	Transform htlp;
+// // 	htlp.basis = Basis(Vector3(90.0f * PI / 180.0f, -180.0f * PI / 180.0f, 0.0f));
+// // 	htlp.origin = Vector3(0.0f, 0.0f, -0.08f);
+// // 	register_property<GDLMSensor, Transform>("hmd_to_leap_motion", &GDLMSensor::set_hmd_to_leap_motion, &GDLMSensor::get_hmd_to_leap_motion, htlp);
+// // }
 
 void GDLMSensor::_init() {
 
@@ -309,17 +309,54 @@ void GDLMSensor::update_hand_data(GDLMSensor::hand_data *p_hand_data, Leap::Hand
 	// first pinch distance
 	//args.push_back(Variant(p_leap_hand->pinchDistance())); //pinchDistance() doesn't exist until V3 SDK
 	args.push_back(Variant(p_leap_hand->pinchStrength())); //...so just use pinchStrength() again? :/
-	p_hand_data->scene->call("set_pinch_distance", args);
+	//p_hand_data->scene->call("set_pinch_distance", args);
+	p_hand_data->scene->call("set_pinch_distance", p_leap_hand->pinchStrength());
 
 	// then pinch strength
 	args.clear();
 	args.push_back(Variant(p_leap_hand->pinchStrength()));
-	p_hand_data->scene->call("set_pinch_strength", args);
+	//p_hand_data->scene->call("set_pinch_strength", args);
+	p_hand_data->scene->call("set_pinch_strength", p_leap_hand->pinchStrength());
 
 	// and grab strength
 	args.clear();
 	args.push_back(Variant(p_leap_hand->grabStrength()));
-	p_hand_data->scene->call("set_grab_strength", args);
+	//p_hand_data->scene->call("set_grab_strength", args);
+	p_hand_data->scene->call("set_grab_strength", p_leap_hand->grabStrength());
+
+  //printf("pinchStrength(): %f\n", p_leap_hand->pinchStrength());
+	if(p_leap_hand->pinchStrength() > 0.9) {
+			if (p_hand_data->type == 0) {
+				is_pinched_left = true;
+				last_pinched_frame = controller.frame();
+			} else if (p_hand_data->type == 1) {
+				is_pinched_right = true;
+				last_pinched_frame = controller.frame();
+			}
+	} else {
+	  if (p_hand_data->type == 0) {
+		  is_pinched_left = false;
+		} else if (p_hand_data->type == 1) {
+		  is_pinched_right = false;
+	  }
+ }
+
+  //printf("grabStrength(): %f\n", p_leap_hand->grabStrength());
+	if(p_leap_hand->grabStrength() > 0.9) {
+		if (p_hand_data->type == 0) {
+			is_grabbed_left = true;
+			last_grabbed_frame = controller.frame();
+		} else if (p_hand_data->type == 1) {
+			is_grabbed_right = true;
+			last_grabbed_frame = controller.frame();
+		}
+	} else {
+	  if (p_hand_data->type == 0) {
+		  is_grabbed_left = false;
+		} else if (p_hand_data->type == 1) {
+		  is_grabbed_right = false;
+	  }
+	}
 };
 
 void GDLMSensor::update_hand_position(GDLMSensor::hand_data *p_hand_data, Leap::Hand *p_leap_hand) {
@@ -472,9 +509,13 @@ int GDLMSensor::count_hands(int p_type, bool p_active_only) {
 }
 
 GDLMSensor::hand_data *GDLMSensor::new_hand(int p_type, uint32_t p_leap_id) {
+
+	printf("GDLMSensor::new_hand(..)");
 	if (hand_scenes[p_type].is_null()) {
+	  printf("GDLMSensor::new_hand(..) 1");
 		return NULL;
 	} else if (!hand_scenes[p_type]->can_instance()) {
+	  printf("GDLMSensor::new_hand(..) 2");
 		return NULL;
 	}
 
@@ -525,19 +566,22 @@ GDLMSensor::hand_data *GDLMSensor::new_hand(int p_type, uint32_t p_leap_id) {
 		}
 	}
 
-	Array args;
-	args.push_back(Variant(new_hand_data->scene));
-	emit_signal("new_hand", args);
+	//Array args;
+	//args.push_back(Variant(new_hand_data->scene));
+	//args.push_back(new_hand_data->type);
+	printf("new_hand signal emitted from gdlm_sensor.cpp");
+	emit_signal("new_hand", new_hand_data->scene, new_hand_data->type);
 
 	return new_hand_data;
 }
 
 void GDLMSensor::delete_hand(GDLMSensor::hand_data *p_hand_data) {
+	printf("GDLMSensor::delete_hand(..)");
 	// this should free everything up and invalidate it, no need to do anything more...
 	if (p_hand_data->scene != NULL) {
-		Array args;
-		args.push_back(Variant(p_hand_data->scene));
-		emit_signal("about_to_remove_hand", args);
+		//Array args;
+		//args.push_back(Variant(p_hand_data->scene));
+		emit_signal("about_to_remove_hand", p_hand_data->scene);
 
 		// hide and then queue free, this will properly destruct our scene and remove it from our tree
 		p_hand_data->scene->hide();
@@ -548,7 +592,8 @@ void GDLMSensor::delete_hand(GDLMSensor::hand_data *p_hand_data) {
 }
 
 // our Godot physics process, runs within the physic thread and is responsible for updating physics related stuff
-void GDLMSensor::_physics_process(float delta) {
+void GDLMSensor::_physics_process_cpp(float delta) {
+	//printf("GDLMSensor::_physics_process_cpp(..)");
   Leap::Frame frame;
 	uint64_t arvr_frame_usec;
 
@@ -623,6 +668,7 @@ void GDLMSensor::_physics_process(float delta) {
 			hd = new_hand(type, hand.id());
 			if (hd != NULL) {
 				hand_nodes.push_back(hd);
+				//emit_signal("new_hand")
 			}
 		}
 		if (hd != NULL) {
@@ -658,6 +704,39 @@ void GDLMSensor::_physics_process(float delta) {
 	}
 }
 
+void GDLMSensor::_notification(int p_what) {
+	switch (p_what) {
+  case NOTIFICATION_PHYSICS_PROCESS:
+		{
+    float time = get_physics_process_delta_time();
+    _physics_process_cpp(time);
+    break;
+		}
+  default:
+    return;
+	}
+}
+
+bool GDLMSensor::get_is_pinched_left() {
+	return is_pinched_left;
+}
+
+bool GDLMSensor::get_is_pinched_right() {
+	return is_pinched_right;
+}
+
+bool GDLMSensor::get_is_grabbed_left() {
+	return is_grabbed_left;
+}
+
+bool GDLMSensor::get_is_grabbed_right() {
+	return is_grabbed_right;
+}
+
+float GDLMSensor::get_hands_scale_factor() {
+  return last_frame.scaleFactor(last_pinched_frame);
+}
+
 void GDLMSensor::_bind_methods() {
   ClassDB::bind_method(D_METHOD("get_is_running"), &GDLMSensor::get_is_running);
   ClassDB::bind_method(D_METHOD("get_is_connected"), &GDLMSensor::get_is_connected);
@@ -678,9 +757,15 @@ void GDLMSensor::_bind_methods() {
   //ClassDB::bind_method(D_METHOD("_physics_process"), &GDLMSensor::_physics_process);
   ClassDB::bind_method(D_METHOD("get_finger_name"), &GDLMSensor::get_finger_name);
   ClassDB::bind_method(D_METHOD("get_finger_bone_name"), &GDLMSensor::get_finger_bone_name);
+  ClassDB::bind_method(D_METHOD("get_is_pinched_left"), &GDLMSensor::get_is_pinched_left);
+  ClassDB::bind_method(D_METHOD("get_is_pinched_right"), &GDLMSensor::get_is_pinched_right);
+  ClassDB::bind_method(D_METHOD("get_is_grabbed_left"), &GDLMSensor::get_is_grabbed_left);
+  ClassDB::bind_method(D_METHOD("get_is_grabbed_right"), &GDLMSensor::get_is_grabbed_right);
+  ClassDB::bind_method(D_METHOD("get_hands_scale_factor"), &GDLMSensor::get_hands_scale_factor);
 
 
-	ADD_SIGNAL(MethodInfo("new_hand", PropertyInfo(Variant::OBJECT, "hand", PROPERTY_HINT_RESOURCE_TYPE, "SceneTree")));
+	ADD_SIGNAL(MethodInfo("new_hand", PropertyInfo(Variant::OBJECT, "hand", PROPERTY_HINT_RESOURCE_TYPE, "SceneTree")
+	                                , PropertyInfo(Variant::INT, "hand_type")));
 	ADD_SIGNAL(MethodInfo("about_to_remove_hand", PropertyInfo(Variant::OBJECT, "hand", PROPERTY_HINT_RESOURCE_TYPE, "SceneTree")));
 
 

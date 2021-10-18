@@ -42,9 +42,9 @@ class GDLMListener : public Leap::Listener {
 };
 
 class GDLMSensor : public Spatial {
+	GDCLASS(GDLMSensor, Spatial)
 	//LEAP_CONNECTION leap_connection;
   Leap::Controller controller;
-	GDCLASS(GDLMSensor, Spatial)
 
 private:
   GDLMListener listener;
@@ -53,6 +53,8 @@ private:
 
 	//const LEAP_TRACKING_EVENT *last_frame;
   Leap::Frame last_frame;
+  Leap::Frame last_pinched_frame;
+  Leap::Frame last_grabbed_frame;
 
 	//LEAP_DEVICE_INFO *last_device;
   Leap::Device *last_device;
@@ -115,9 +117,14 @@ private:
 	// void handleImageEvent(const LEAP_IMAGE_EVENT *image_event);
 	// void handlePointMappingChangeEvent(const LEAP_POINT_MAPPING_CHANGE_EVENT *point_mapping_change_event);
 	// void handleHeadPoseEvent(const LEAP_HEAD_POSE_EVENT *head_pose_event);
+	bool is_pinched_left;
+	bool is_pinched_right;
+	bool is_grabbed_left;
+	bool is_grabbed_right;
 
 protected:
 	static void _bind_methods();
+  void _notification(int p_what);
 	//void lock();
 	//void unlock();
 
@@ -173,7 +180,14 @@ public:
 	void set_left_hand_scene(String p_resource);
 	String get_right_hand_scene() const;
 	void set_right_hand_scene(String p_resource);
-	void _physics_process(float delta);
+	void _physics_process_cpp(float delta);
+
+	bool get_is_pinched_left();
+	bool get_is_pinched_right();
+	bool get_is_grabbed_left();
+	bool get_is_grabbed_right();
+	//float get_hands_scale_factor(Leap::Frame);
+	float get_hands_scale_factor();
 };
 
 
