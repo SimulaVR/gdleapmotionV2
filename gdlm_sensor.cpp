@@ -327,11 +327,19 @@ void GDLMSensor::update_hand_data(GDLMSensor::hand_data *p_hand_data, Leap::Hand
   //printf("pinchStrength(): %f\n", p_leap_hand->pinchStrength());
 	if(p_leap_hand->pinchStrength() > 0.9) {
 			if (p_hand_data->type == 0) {
-				is_pinched_left = true;
-				last_pinched_frame = controller.frame();
+			  if (is_pinched_left) {
+				  // ..do nothing..
+				} else {
+					is_pinched_left = true;
+					last_pinched_frame = controller.frame();
+				}
 			} else if (p_hand_data->type == 1) {
-				is_pinched_right = true;
-				last_pinched_frame = controller.frame();
+			  if (is_pinched_right) {
+				  // ..do nothing..
+				} else {
+					is_pinched_right = true;
+					last_pinched_frame = controller.frame();
+				}
 			}
 	} else {
 	  if (p_hand_data->type == 0) {
@@ -344,11 +352,19 @@ void GDLMSensor::update_hand_data(GDLMSensor::hand_data *p_hand_data, Leap::Hand
   //printf("grabStrength(): %f\n", p_leap_hand->grabStrength());
 	if(p_leap_hand->grabStrength() > 0.9) {
 		if (p_hand_data->type == 0) {
-			is_grabbed_left = true;
-			last_grabbed_frame = controller.frame();
+			if (is_grabbed_left) {
+				// ..do nothing..
+			} else {
+				is_grabbed_left = true;
+				last_grabbed_frame = controller.frame();
+			}
 		} else if (p_hand_data->type == 1) {
-			is_grabbed_right = true;
-			last_grabbed_frame = controller.frame();
+			if (is_grabbed_right) {
+				// ..do nothing..
+			} else {
+				is_grabbed_right = true;
+				last_grabbed_frame = controller.frame();
+			}
 		}
 	} else {
 	  if (p_hand_data->type == 0) {
@@ -512,10 +528,8 @@ GDLMSensor::hand_data *GDLMSensor::new_hand(int p_type, uint32_t p_leap_id) {
 
 	printf("GDLMSensor::new_hand(..)");
 	if (hand_scenes[p_type].is_null()) {
-	  printf("GDLMSensor::new_hand(..) 1");
 		return NULL;
 	} else if (!hand_scenes[p_type]->can_instance()) {
-	  printf("GDLMSensor::new_hand(..) 2");
 		return NULL;
 	}
 
